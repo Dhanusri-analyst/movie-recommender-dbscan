@@ -303,14 +303,14 @@ def recommend(movie_name, n=6):
 
     movie_row   = matches.iloc[0]
     actual_title = matches.index[0]
-    cluster      = movie_row.get('dbscan_cluster', -1)
+    cluster      = movie_row.get('dbscan_clusters', -1)
     is_noise     = (cluster == -1)
 
     if is_noise:
-        cluster = df_movies[df_movies['dbscan_cluster'] != -1]['dbscan_cluster'].value_counts().idxmax()
+        cluster = df_movies[df_movies['dbscan_clusters'] != -1]['dbscan_clusters'].value_counts().idxmax()
 
     pool = df_movies[
-        (df_movies['dbscan_cluster'] == cluster) &
+        (df_movies['dbscan_clusters'] == cluster) &
         (df_movies.index != actual_title)
     ]
 
@@ -335,8 +335,8 @@ st.markdown("""
 # ── Stats strip ───────────────────────────────────────────────
 if assets_loaded:
     total_movies  = len(df_movies)
-    total_clusters = df_movies['dbscan_cluster'].nunique() - (1 if -1 in df_movies['dbscan_cluster'].values else 0)
-    noise_pct     = round((df_movies['dbscan_cluster'] == -1).sum() / total_movies * 100, 1)
+    total_clusters = df_movies['dbscan_clusters'].nunique() - (1 if -1 in df_movies['dbscan_clusters'].values else 0)
+    noise_pct     = round((df_movies['dbscan_clusters'] == -1).sum() / total_movies * 100, 1)
 
     st.markdown(f"""
     <div class="stats-strip">
@@ -457,3 +457,5 @@ st.markdown("""
     Built with <span>♥</span> using Python · DBSCAN · Streamlit &nbsp;·&nbsp; Team 11
 </div>
 """, unsafe_allow_html=True)
+
+   
